@@ -1,38 +1,16 @@
 from rest_framework import serializers
 from .models import Brand, Category, Phone, Order
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 0ac31372be950b7ac35a2b91646ce464144fbc3b
-class BrandSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(max_length=100)
-    country = serializers.CharField(max_length=100, required=False, allow_blank=True)
-
-    def create(self, validated_data):
-        return Brand.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        instance.name = validated_data.get('name', instance.name)
-        instance.country = validated_data.get('country', instance.country)
-        instance.save()
-        return instance
+class BrandSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Brand
+        fields = ['id', 'name', 'country']
 
 
-class CategorySerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(max_length=100)
-    slug = serializers.SlugField()
-
-    def create(self, validated_data):
-        return Category.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        instance.name = validated_data.get('name', instance.name)
-        instance.slug = validated_data.get('slug', instance.slug)
-        instance.save()
-        return instance
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'description', 'icon']
 
 
 class PhoneSerializer(serializers.ModelSerializer):
@@ -41,7 +19,12 @@ class PhoneSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Phone
-        fields = ['id', 'brand', 'brand_name', 'category', 'category_name', 'model_name', 'price', 'description']
+        fields = [
+            'id', 'brand', 'brand_name', 'category', 'category_name',
+            'name', 'price', 'old_price', 'memory_gb', 'description',
+            'short_description', 'specifications', 'image', 'rating',
+            'stock', 'sold_count', 'in_stock', 'created_at',
+        ]
 
 
 class OrderSerializer(serializers.ModelSerializer):
